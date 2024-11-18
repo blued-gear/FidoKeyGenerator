@@ -92,7 +92,7 @@ def find_device(path: str = None):
 
 def list_devices():
     devices = enumerate_usable_devices()
-    for (dev, client) in devices:
+    for dev in devices:
         print(f"{dev.product_name} : {dev.descriptor.path}")
 
 
