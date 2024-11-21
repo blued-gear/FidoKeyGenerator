@@ -1,6 +1,6 @@
 # FidoKeyGenerator
 
-With this small app it is possible to use any FIDO2 authenticator, 
+With this small application it is possible to use any FIDO2 authenticator, 
 which supports the *HMAC-Secret* extension, to generate as many symmetric cryptographic keys
 as you want.
 
@@ -39,7 +39,18 @@ echo 'some input to digest' | python3 "$KEYGEN_DIR/fidokeygenerator.py" "$CREDEN
 
 \
 To see all options run
-`python fidokeygenerator.py --help`
+`python3 fidokeygenerator.py --help`
+
+### Server Mode
+
+In this mode the application will create a Unix-socket and listens for connections, 
+which provide the input to digest.\
+By using `--cache` the generated secrets will be cached so you don't have to interact with your authenticator after the initial request
+(except when a unencountered input is sent).
+
+```shell
+python3 "$KEYGEN_DIR/fidokeygenerator.py"  --server "<path for the .sock file>" --cache "$CREDENTIAL"
+```
 
 # Acknowledgements
 

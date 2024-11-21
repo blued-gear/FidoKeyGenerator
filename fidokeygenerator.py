@@ -2,12 +2,10 @@
 
 import argparse
 import hashlib
-import os
 import secrets
 import sys
-from getpass import getpass
 
-from fido2.client import Fido2Client, UserInteraction
+from fido2.client import Fido2Client
 from fido2.hid import CtapHidDevice
 from fido2.webauthn import (PublicKeyCredentialCreationOptions,
                             PublicKeyCredentialRequestOptions,
@@ -17,37 +15,13 @@ from fido2.webauthn import (PublicKeyCredentialCreationOptions,
                             PublicKeyCredentialType,
                             PublicKeyCredentialDescriptor)
 
+from server_mode import ServerMode
+from utils import *
+
 try:
     from fido2.pcsc import CtapPcscDevice
 except ImportError:
     CtapPcscDevice = None
-
-
-def eprint(msg):
-    print(msg, file=sys.stderr)
-
-
-def read_full_stdin() -> bytes:
-    stdin = os.fdopen(os.dup(sys.stdin.fileno()), 'rb')
-    if sys.platform.startswith('win'):
-        try:
-            __import__('msvcrt').setmode(stdin.fileno(), os.O_BINARY)
-        except ImportError:
-            pass
-
-    return stdin.read()
-
-
-class CliInteraction(UserInteraction):
-    def prompt_up(self):
-        eprint("\nTouch your authenticator device now...\n")
-
-    def request_pin(self, permissions, rd_id):
-        return getpass("Enter PIN: ")
-
-    def request_uv(self, permissions, rd_id):
-        eprint("User Verification required.")
-        return True
 
 
 def enumerate_usable_devices():
@@ -174,6 +148,19 @@ def process_args():
         help="Init a new credential. 'param' must be given in the form of <Some string>@<some.string>"
     )
     parser.add_argument(
+        "--server",
+        type=str,
+        default=False,
+        metavar="PATH",
+        help="run in server-mode: create a unix-socket at the given path, read input for each connection and output the key (as hex)"
+    )
+    parser.add_argument(
+        "--cache",
+        default=False,
+        action="store_true",
+        help="[only for --server] if input is encoutered twice the output will be returned without triggering the FIDO-key"
+    )
+    parser.add_argument(
         "param",
         type=str,
         nargs="?",
@@ -208,6 +195,17 @@ def main():
             sys.exit(1)
 
         init_cred(dev, split[0], split[1])
+    elif args.server is not None and args.server != False:
+        id_param = args.param
+        if len(id_param) == 0:
+            eprint("expected ID for param")
+            sys.exit(1)
+        server = ServerMode(dev, args.server, args.cache, id_param)
+
+        try:
+            server.run_server()
+        except KeyboardInterrupt:
+            sys.exit(0)
     else:
         id_param = args.param
         if len(id_param) == 0:
