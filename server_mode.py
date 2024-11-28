@@ -1,9 +1,9 @@
 import datetime
-import os
+import hashlib
+import secrets
 import signal
 import socket
 import stat
-import sys
 
 from fido2.client import Fido2Client
 from fido2.hid import CtapHidDevice

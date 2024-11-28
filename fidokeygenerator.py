@@ -3,7 +3,6 @@
 import argparse
 import hashlib
 import secrets
-import sys
 
 from fido2.client import Fido2Client
 from fido2.hid import CtapHidDevice
