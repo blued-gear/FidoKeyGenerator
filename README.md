@@ -54,7 +54,7 @@ python3 "$KEYGEN_DIR/fidokeygenerator.py"  --server "<path for the .sock file>" 
 
 ## Examples
 
-Some example are shown in my Blog:
+Some examples are shown in my Blog:
 [Extra factor for Monero Wallet](https://projects.chocolatecakecodes.goip.de/blued_gear/blog/-/wikis/Script:-use-FidoKeyGenerator-for-2FA-of-Monero-GUI),
 [Key for Bormatic](https://projects.chocolatecakecodes.goip.de/blued_gear/blog/-/wikis/Use-FIDO-Key-for-Borgmatic).
 
