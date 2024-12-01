@@ -52,6 +52,12 @@ By using `--cache` the generated secrets will be cached so you don't have to int
 python3 "$KEYGEN_DIR/fidokeygenerator.py"  --server "<path for the .sock file>" --cache "$CREDENTIAL"
 ```
 
+## Examples
+
+Some example are shown in my Blog:
+[Extra factor for Monero Wallet](https://projects.chocolatecakecodes.goip.de/blued_gear/blog/-/wikis/Script:-use-FidoKeyGenerator-for-2FA-of-Monero-GUI),
+[Key for Bormatic](https://projects.chocolatecakecodes.goip.de/blued_gear/blog/-/wikis/Use-FIDO-Key-for-Borgmatic).
+
 # Acknowledgements
 
 Most of the code was taken from [python-fido2 hmac_secret example](https://github.com/Yubico/python-fido2/blob/main/examples/hmac_secret.py).
